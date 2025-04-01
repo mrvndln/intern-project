@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,9 +22,13 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/test_route',[UserController::class,'testRoute'])->name('test_route');
+    Route::get('/users',[UserController::class,'mount'])->name('get_user');
+});
 
 
-Route::get('/users',[UserController::class,'mount']);
-Route::post('/login',[UserController::class,'login']);
-Route::view('/testpage', 'testpage');
-Route::get('/',[UserController::class,'showPage']);
+
+Route::post('/login',[LoginController::class,'login']);
+Route::middleware('auth:sanctum')->post('/logout',[LogoutController::class,'logout']);
+

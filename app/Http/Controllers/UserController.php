@@ -36,7 +36,7 @@ class UserController extends Controller
         return $this->responseAPI('401','Unauthorized',[]); 
     }
 
-    public function showPage() {
-        return view('welcome');
+    public function testRoute() {
+        return $this->responseAPI('200','This is a test route.',[]); 
     }
 }

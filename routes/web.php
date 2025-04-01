@@ -3,7 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Livewire\LoginUser;
-use Illuminate\Routing\Controllers\Middleware;
+use Faker\Guesser\Name;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,22 +21,13 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // })->name('welcome');
 
+Route::middleware('auth')->group(function () {    
+    Route::view('/testpage', 'testpage')->name('test');
+    Route::view('/dashboard','welcome')->name('dashboard'); 
+});
+
+
+
 Route::get('/app', function () {
     return view('app');
-});
-
-Route::get('/register', function (){
-    return view('register');
-});
-
-Route::post('/login',[AuthController::class,'login']);
-
-Route::group([
-    'middleware' => 'auth:sanctum'
-], function(){
-    Route::view('/testpage', 'testpage')->name('test');
-    Route::get('/',[UserController::class,'showPage']);
-});
-
-
-
+})->name('app');

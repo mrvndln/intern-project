@@ -18,7 +18,7 @@ class LoginUser extends Component
         'username' => 'required|min:6',
         'password' => 'required|min:8',
     ];
-    public function login(UserRepository $repository) {
+    public function login(Request $request) {
 
         $this->resetErrorBag('username');
         $this->resetErrorBag('password');
@@ -32,14 +32,12 @@ class LoginUser extends Component
         ];
 
         if(Auth::attempt($credentials)) {
-            // $user = User::where('username',$request->username)->first();
-            // $token = $user->createToken('Bearer_Token')->plainTextToken;
-            redirect('/');
-        }else{
-            $this->errorMessage = 'The username or password is incorrect.';
+            $request->session()->regenerate();
+            return redirect()->route('dashboard');;
+        }   
             $this->resetErrorBag('username');
-            $this->resetErrorBag('password');
-        }      
+            $this->resetErrorBag('password'); 
+            $this->errorMessage = 'The username or password is incorrect.';   
 
         $this->reset(['username', 'password']);
     }

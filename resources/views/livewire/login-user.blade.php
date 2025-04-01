@@ -1,5 +1,5 @@
 <div class=" max-w-md bg-white shadow-md rounded-md mt-40">
-        <div class="text-center font-bold text-lg mt-8">Login</div>
+        <div class="text-center font-bold text-xl mt-8">Sign In</div>
        
         <div class="mb-6">
             <form wire:submit="login" class="px-6">

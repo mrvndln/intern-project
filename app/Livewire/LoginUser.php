@@ -39,7 +39,7 @@ class LoginUser extends Component
             $this->resetErrorBag('password'); 
             $this->errorMessage = 'The username or password is incorrect.';   
 
-        $this->reset(['username', 'password']);
+         $this->reset(['username', 'password']);
     }
     public function render()
     {

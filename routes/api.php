@@ -25,10 +25,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/test_route',[UserController::class,'testRoute'])->name('test_route');
     Route::get('/users',[UserController::class,'mount'])->name('get_user');
+    Route::post('/logout',[LogoutController::class,'logout']);
 });
 
 
 
 Route::post('/login',[LoginController::class,'login']);
-Route::middleware('auth:sanctum')->post('/logout',[LogoutController::class,'logout']);
+
 

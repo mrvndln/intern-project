@@ -16,7 +16,7 @@ class LogoutUser extends Component
  
     $request->session()->regenerateToken();
  
-    return redirect()->route('app');
+    return redirect()->route('login');
 }
 
     public function render()

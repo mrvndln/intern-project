@@ -26,9 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::view('/dashboard','welcome')->name('dashboard'); 
 });
 
-Route::get('/user_management', function () {
-    return view('user-management');
-})->name('user_management');
+
 
 Route::get('/login', function () {
     return view('app');

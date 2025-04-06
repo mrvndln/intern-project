@@ -4,28 +4,34 @@ namespace App\Repositories;
 
 use App\Interfaces\UserInterface;
 use App\Models\User;
+use App\Models\UserDetails;
 use App\Traits\ResponseTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
-class UserRepository implements UserInterface{
-    
+class UserRepository implements UserInterface
+{
+
     use ResponseTrait;
 
     public function getAll()
     {
-        return User::all();
+        $users = DB::table('users')
+            ->join('user_details', 'users.id', '=', 'user_details.user_id')
+            ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+            ->get();
+        return $users;
     }
 
-    public function validation($data, $validation_type)
+    public function validation(array $data, $validation_type, $userId)
     {
         try {
             DB::beginTransaction();
             if ($validation_type == 'create') {
                 $validator = Validator::make($data, [
                     'name' => 'required',
-                    'contact' => 'required|unique:user_details,contact', 
+                    'contact' => 'required|unique:user_details,contact',
                     'email' => 'sometimes',
                     'address' => 'required',
                     'birthdate' => 'required',
@@ -35,11 +41,11 @@ class UserRepository implements UserInterface{
             } else {
                 $validator = Validator::make($data, [
                     'name' => 'sometimes',
-                    'contact' => 'sometimes|unique:user_details,contact'.$data['id'], 
+                    'contact' => 'required|unique:user_details,contact,' . $userId,
                     'email' => 'sometimes',
                     'address' => 'sometimes',
                     'birthdate' => 'sometimes',
-                    'username' => 'sometimes|unique:users,username'.$data['id'],
+                    'username' => 'required|unique:users,username,' . $userId,
                     'password' => 'sometimes'
                 ]);
             }
@@ -55,13 +61,14 @@ class UserRepository implements UserInterface{
         }
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         try {
-            $response = $this->validation($data, 'create');
+            $response = $this->validation($data, 'create','');
             if ($response['code'] !== '200') {
                 return $this->response($response['code'], $response['message'], $response['result']);
-            } 
-            
+            }
+
             $user = User::create([
                 'name' => $response['result']['name'],
                 'email' => $response['result']['email'],
@@ -70,37 +77,75 @@ class UserRepository implements UserInterface{
             ]);
 
             $user->user_detail()->create([
-                'contact' => $response['result']['contact'], 
+                'contact' => $response['result']['contact'],
                 'address' => $response['result']['address'],
                 'birthdate' => $response['result']['birthdate'],
             ]);
 
             return $this->response($response['code'], $response['message'], $response['result']);
-
         } catch (\Exception $e) {
-            return $this->response('500','Something went wrong.',$e->getMessage());
+            return $this->response('500', 'Something went wrong.', $e->getMessage());
         }
     }
 
-    public function loginValidation($data){
+    public function update($data, $id)
+    {
         try {
-            $validator = Validator::make($data,[
+            $response = $this->validation($data, '', $id);
+            if ($response['code'] !== '200') {
+                return $this->response($response['code'], $response['message'], $response['result']);
+            }
+
+            $user = User::find($id);
+
+            $user->name = $response['result']['name'];
+            $user->email = $response['result']['email'];
+            $user->username = $response['result']['username'];
+
+            $user_details = UserDetails::find($id);
+
+            $user_details->contact = $response['result']['contact'];
+            $user_details->address = $response['result']['address'];
+            $user_details->birthdate = $response['result']['birthdate'];
+
+            $user->save();
+            $user_details->save();
+
+            return $this->response($response['code'], $response['message'], $response['result']);
+        } catch (\Exception $e) {
+            return $this->response('500', 'Something went wrong.', $e->getMessage());
+        }
+    }
+
+    public function delete($id) {
+        $user = User::find($id);
+        $user->delete();
+    }
+
+    public function loginValidation($data)
+    {
+        try {
+            $validator = Validator::make($data, [
                 'username' => 'required',
                 'password' => 'required',
             ]);
 
-            if($validator->fails()){
-                return $this->response('401','Incorrect credentials.', $validator->errors());
+            if ($validator->fails()) {
+                return $this->response('401', 'Incorrect credentials.', $validator->errors());
             }
 
-            return $this->response('200','',$validator->validated());
-
-        } catch(\Exception $e) {
-            return $this->response('','', $e->getMessage());
+            return $this->response('200', '', $validator->validated());
+        } catch (\Exception $e) {
+            return $this->response('', '', $e->getMessage());
         }
     }
-    public function find($data) {
-       return User::where('username',$data)->first();
+    public function find($data)
+    {
+        $users = DB::table('users')
+            ->join('user_details', 'users.id', '=', 'user_details.user_id')
+            ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+            ->where('users.id', $data)
+            ->first();
+        return $users;
     }
-
 }

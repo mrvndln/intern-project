@@ -141,11 +141,15 @@ class UserRepository implements UserInterface
     }
     public function find($data)
     {
-        $users = DB::table('users')
+        if(gettype($data) !== 'string') {
+            $user = DB::table('users')
             ->join('user_details', 'users.id', '=', 'user_details.user_id')
             ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
             ->where('users.id', $data)
             ->first();
-        return $users;
+        return $user;
+        } else {
+            return User::where('username',$data)->first();
+        }
     }
 }

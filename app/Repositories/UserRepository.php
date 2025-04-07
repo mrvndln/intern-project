@@ -101,7 +101,11 @@ class UserRepository implements UserInterface
             $user->name = $response['result']['name'];
             $user->email = $response['result']['email'];
             $user->username = $response['result']['username'];
-
+            
+            if(!is_null($response['result']['password'])){
+                $user->password = $response['result']['password'];
+            }
+            
             $user_details = UserDetails::find($id);
 
             $user_details->contact = $response['result']['contact'];

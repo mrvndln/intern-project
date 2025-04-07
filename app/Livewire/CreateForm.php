@@ -94,6 +94,7 @@ class CreateForm extends Component
 
         $this->repository->update($updatedUser,$this->userId);
         $this->users = $this->repository->getAll();
+        $this->clearInputs();
         $this->hideForm();
     }
 

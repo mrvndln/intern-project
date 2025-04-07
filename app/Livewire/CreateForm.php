@@ -88,7 +88,8 @@ class CreateForm extends Component
             'email' => $this->email,
             'address' => $this->address,
             'birthdate' => $this->birthdate,
-            'username' => $this->username
+            'username' => $this->username,
+            'password' => $this->password
         ];
 
         $this->repository->update($updatedUser,$this->userId);
@@ -99,7 +100,7 @@ class CreateForm extends Component
     public function deleteUser($id,UserRepository $repository) {
         $this->repository = $repository;
         $this->repository->delete($id);
-        $this->repository->getAll();
+        $this->repository->getAll();    
     }
 
 

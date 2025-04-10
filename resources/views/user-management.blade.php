@@ -9,7 +9,7 @@
 </head>
 
 <body class="bg-slate-900 flex justify-center items-center">
-    <livewire:logout-user>
+    <livewire:create-form>
     @livewireScripts
 </body>
 </html>

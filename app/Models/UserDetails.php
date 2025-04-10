@@ -13,12 +13,10 @@ class UserDetails extends Model
     protected $fillable = [
         'contact',
         'address',
-        'age',
         'birthdate',
     ];
 
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
-
 }

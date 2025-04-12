@@ -7,8 +7,8 @@ trait UserValidation
   public function validation_rules_array()
   {
     return [
-      'name' => ['min:6', 'required'],
-      'contact' => ['bail', 'required', 'min:11', 'unique:user_details,contact'],
+      'name' => 'required',
+      'contact' => 'required|min:11|unique:user_details,contact',
       'email' => 'required|email',
       'address' => 'required|min:10',
       'birthdate' => 'required',

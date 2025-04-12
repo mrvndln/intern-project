@@ -29,7 +29,7 @@ class AddUser extends Component
 
 
     protected function rules() {
-        return $this->rulesArray();
+        return $this->validation_rules_array();
     }
       
     public function addUser()

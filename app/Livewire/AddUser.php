@@ -32,6 +32,9 @@ class AddUser extends Component
         return $this->validation_rules_array();
     }
       
+    protected function messages() {
+        return $this->validation_rules_messages();
+    }
     public function addUser()
     {
         $validated = $this->validate();

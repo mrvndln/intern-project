@@ -25,7 +25,7 @@
                 <td class="py-2 px-4 border">{{ $user->birthdate }}</td>
                 <td class="py-2 px-4 border">{{ $user->username }}</td>
                 <td class="py-2 px-4 border">
-                    <button wire:click="editUser({{ $user->id }})" class="text-blue-500 hover:text-blue-700">Edit</button>
+                    <button wire:click="$dispatch('openModal',{component: 'update-user', params: { id: {{ $user->id }} } })" class="text-blue-500 hover:text-blue-700">Edit</button>
                         <button wire:click="triggerDelete({{ $user->id }})" type="button" class="text-red-500 hover:text-red-700 ml-2">Delete</button>
                 </td>
             </tr>

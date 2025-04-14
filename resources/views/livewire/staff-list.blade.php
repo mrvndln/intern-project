@@ -1,4 +1,4 @@
-<div>
+<div wire:cloak>
     <div wire:click="$dispatch('openModal',{component: 'add-user', params: []})" class="flex justify-end p-2">
         <button class="w-sm flex items-center justify-center px-4 py-2 text-sm text-white bg-green-500 hover:bg-green-600 rounded-lg transition-colors"><i class="fas fa-user-plus mr-3 text-gray-100"></i>Add Users</button>
     </div>

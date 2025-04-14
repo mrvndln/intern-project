@@ -21,10 +21,6 @@ class StaffList extends Component
         $this->repository = $repository;
         $this->users = $this->repository->getAll();
     }
-
-    public function editUser($id) {
-        $this->dispatch('edit-user', $id);
-    }
     
     public function triggerDelete($id) {
         $this->dispatch('triggerDelete', userId: $id);

@@ -29,11 +29,11 @@ class AddUser extends Component
 
 
     protected function rules() {
-        return $this->validation_rules_array();
+        return $this->validation_rules_array('create');
     }
       
     protected function messages() {
-        return $this->validation_rules_messages();
+        return $this->validation_rules_messages('create');
     }
     public function addUser()
     {

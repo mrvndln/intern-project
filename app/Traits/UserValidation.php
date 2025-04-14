@@ -4,8 +4,20 @@ namespace App\Traits;
 
 trait UserValidation
 {
-  public function validation_rules_array()
+  public function validation_rules_array($type)
   {
+    if ($type !== 'create') {
+      return [
+        'name' => 'required|min:6',
+        'contact' => 'required|min:11',
+        'email' => 'required|email',
+        'address' => 'required|min:10',
+        'birthdate' => 'required',
+        'username' => 'required|min:6',
+        'password' => 'sometimes',
+      ];
+    }
+
     return [
       'name' => 'required',
       'contact' => 'required|min:11|unique:user_details,contact',
@@ -17,7 +29,7 @@ trait UserValidation
     ];
   }
 
-  public function validation_rules_messages()
+  public function validation_rules_messages($type)
   {
     return [
       'name.required' => 'Please fill out this field.',

@@ -12,10 +12,11 @@ use Livewire\Component;
 class AddUser extends Component
 {
     use UserValidation;
-   
+
     protected $repository;
 
-    public function boot(UserRepository $repository){
+    public function boot(UserRepository $repository)
+    {
         $this->repository = $repository;
     }
 
@@ -28,19 +29,21 @@ class AddUser extends Component
     #[Validate] public $password;
 
 
-    protected function rules() {
+    protected function rules()
+    {
         return $this->validation_rules_array('create');
     }
-      
-    protected function messages() {
+
+    protected function messages()
+    {
         return $this->validation_rules_messages('create');
     }
     public function addUser()
     {
         $validated = $this->validate();
-        
+
         $this->repository->add($validated);
-        $this->dispatch('user-added', message: 'User added successfully!');
+        $this->dispatch('show-success-modal', message: 'User added successfully!');
         $this->clearInputs();
         $this->dispatch('closeModal');
         $this->dispatch('reload-list');

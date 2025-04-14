@@ -21,7 +21,7 @@
             @livewireScripts
 
             <script>
-                Livewire.on('user-added', ({
+                Livewire.on('show-success-modal', ({
                     message
                 }) => {
                     Swal.fire({

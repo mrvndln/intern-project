@@ -7,6 +7,7 @@
         <thead>
             <tr class="bg-gray-200">
                 <th class="py-2 px-4 border">Name</th>
+                <th class="py-2 px-4 border">Role</th>
                 <th class="py-2 px-4 border">Contact</th>
                 <th class="py-2 px-4 border">Email</th>
                 <th class="py-2 px-4 border">Address</th>
@@ -19,10 +20,15 @@
             @foreach($users as $user)
             <tr>
                 <td class="py-2 px-4 border">{{ $user->name }}</td>
-                <td class="py-2 px-4 border">{{ $user->contact }}</td>
+                <td class="py-2 px-4 border">
+                    @foreach($user->roles as $role)
+                        {{ $role->role }}{{ !$loop->last ? ', ' : '' }}
+                    @endforeach
+                </td>
+                <td class="py-2 px-4 border">{{ $user->user_detail->contact }}</td>
                 <td class="py-2 px-4 border">{{ $user->email }}</td>
-                <td class="py-2 px-4 border">{{ $user->address }}</td>
-                <td class="py-2 px-4 border">{{ $user->birthdate }}</td>
+                <td class="py-2 px-4 border">{{ $user->user_detail->address }}</td>
+                <td class="py-2 px-4 border">{{ $user->user_detail->birthdate }}</td>
                 <td class="py-2 px-4 border">{{ $user->username }}</td>
                 <td class="py-2 px-4 border">
                     <button wire:click="$dispatch('openModal',{component: 'update-user', params: { id: {{ $user->id }} } })" class="text-blue-500 hover:text-blue-700">Edit</button>

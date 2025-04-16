@@ -34,7 +34,6 @@
                 });
 
                 Livewire.on('triggerDelete', (userId) => {
-                    console.log(userId);
                     Swal.fire({
                         title: "Are you sure?",
                         text: "You won't be able to revert this!",
@@ -45,7 +44,6 @@
                         confirmButtonText: "Yes, delete it!"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            
                             window.Livewire.dispatch('deleteUser', userId);
                             console.log(userId)
                         }
@@ -60,6 +58,7 @@
                     );
                 });
             </script>
+
 </body>
 
 </html>

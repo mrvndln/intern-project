@@ -12,13 +12,13 @@ class UpdateUser extends Component
     use UserValidation;
 
     public $id;
-    public $name, $contact, $email, $address, $birthdate, $username, $password;
+    public $name, $contact, $email, $address, $birthdate, $username, $password, $current_role, $roles, $role_id;
     protected $repository;
 
-    public function boot(UserRepository $repository)
-    {
+    public function boot(UserRepository $repository){
         $this->repository = $repository;
-        $this->editUser($this->id);
+        $this->roles = $repository->getRoles();
+        $this->editUser($this->id); 
     }
 
     protected function rules()
@@ -32,11 +32,16 @@ class UpdateUser extends Component
         $user = $this->repository->find($id);
         $this->id = $user->id;
         $this->name = $user->name;
-        $this->contact = $user->contact;
+        $this->contact = $user->user_detail->contact;
         $this->email = $user->email;
-        $this->address = $user->address;
-        $this->birthdate = $user->birthdate;
+        $this->address = $user->user_detail->address;
+        $this->birthdate = $user->user_detail->birthdate;
         $this->username = $user->username;
+        
+        foreach($user->roles as $role){
+            $this->role_id = $role->id;
+            $this->current_role = $role->role;
+        }
     }
 
     public function updateUser()

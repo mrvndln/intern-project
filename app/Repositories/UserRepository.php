@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Interfaces\UserInterface;
+use App\Models\Role;
 use App\Models\User;
 use App\Models\UserDetails;
 use App\Traits\ResponseTrait;
@@ -17,12 +18,19 @@ class UserRepository implements UserInterface
 
     public function getAll()
     {
-        $users = DB::table('users')
-            ->join('user_details', 'users.id', '=', 'user_details.user_id')
-            ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
-            ->get();
+        $users = User::with(['user_detail','roles'])->get();
+        // $users = DB::table('users')
+        //     ->join('user_details', 'users.id', '=', 'user_details.user_id')
+        //     ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+        //     ->get();
         return $users;
     }
+
+    public function getRoles()
+    {
+        return Role::all();
+    }
+
 
     public function validation(array $data, $validation_type, $userId)
     {
@@ -36,11 +44,13 @@ class UserRepository implements UserInterface
                     'address' => 'required',
                     'birthdate' => 'required',
                     'username' => 'required|unique:users,username',
-                    'password' => 'required|min:8'
+                    'password' => 'required|min:8',
+                    'role_id' => 'required'
                 ]);
             } else {
                 $validator = Validator::make($data, [
                     'name' => 'sometimes',
+                    'role_id' => 'sometimes',
                     'contact' => 'required|unique:user_details,contact,' . $userId,
                     'email' => 'sometimes',
                     'address' => 'sometimes',
@@ -82,6 +92,8 @@ class UserRepository implements UserInterface
                 'birthdate' => $response['result']['birthdate'],
             ]);
 
+            $user->roles()->sync([$response['result']['role_id']]);
+
             return $this->response($response['code'], $response['message'], $response['result']);
         } catch (\Exception $e) {
             return $this->response('500', 'Something went wrong.', $e->getMessage());
@@ -112,6 +124,8 @@ class UserRepository implements UserInterface
             $user_details->address = $response['result']['address'];
             $user_details->birthdate = $response['result']['birthdate'];
 
+            $user->roles()->sync([$response['result']['role_id']]);
+            
             $user->save();
             $user_details->save();
 
@@ -146,11 +160,12 @@ class UserRepository implements UserInterface
     public function find($data)
     {
         if(gettype($data) !== 'string') {
-            $user = DB::table('users')
-            ->join('user_details', 'users.id', '=', 'user_details.user_id')
-            ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
-            ->where('users.id', $data)
-            ->first();
+            $user = User::with(['user_detail','roles'])->where('users.id', $data)->first();
+            // $user = DB::table('users')
+            // ->join('user_details', 'users.id', '=', 'user_details.user_id')
+            // ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+            // ->where('users.id', $data)
+            // ->first();
         return $user;
         } else {
             return User::where('username',$data)->first();

@@ -9,6 +9,7 @@ trait UserValidation
     if ($type !== 'create') {
       return [
         'name' => 'required|min:6',
+        'role_id' => 'sometimes',
         'contact' => 'required|min:11',
         'email' => 'required|email',
         'address' => 'required|min:10',
@@ -20,6 +21,7 @@ trait UserValidation
 
     return [
       'name' => 'required',
+      'role_id' => 'required',
       'contact' => 'required|min:11|unique:user_details,contact',
       'email' => 'required|email',
       'address' => 'required|min:10',

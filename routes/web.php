@@ -23,10 +23,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {    
     Route::view('/testpage', 'testpage')->name('test');
-    Route::view('/dashboard','welcome')->name('dashboard'); 
+    Route::view('/user-management','user-management')->name('user-management'); 
 });
-
-
 
 Route::get('/login', function () {
     return view('app');

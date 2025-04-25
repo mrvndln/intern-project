@@ -33,7 +33,7 @@ class LoginUser extends Component
 
         if(Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('test');
+            return redirect()->route('user-management');
         }   
             $this->resetErrorBag('username');
             $this->resetErrorBag('password'); 

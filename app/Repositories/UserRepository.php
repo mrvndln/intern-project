@@ -3,6 +3,8 @@
 namespace App\Repositories;
 
 use App\Interfaces\UserInterface;
+use App\Models\AccessControl;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\UserDetails;
@@ -10,6 +12,8 @@ use App\Traits\ResponseTrait;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Log;
+use Str;
 
 class UserRepository implements UserInterface
 {
@@ -74,7 +78,7 @@ class UserRepository implements UserInterface
     public function add($data)
     {
         try {
-            $response = $this->validation($data, 'create','');
+            $response = $this->validation($data, 'create', '');
             if ($response['code'] !== '200') {
                 return $this->response($response['code'], $response['message'], $response['result']);
             }
@@ -113,11 +117,11 @@ class UserRepository implements UserInterface
             $user->name = $response['result']['name'];
             $user->email = $response['result']['email'];
             $user->username = $response['result']['username'];
-            
-            if(!is_null($response['result']['password'])){
+
+            if (!is_null($response['result']['password'])) {
                 $user->password = $response['result']['password'];
             }
-            
+
             $user_details = UserDetails::find($id);
 
             $user_details->contact = $response['result']['contact'];
@@ -125,7 +129,7 @@ class UserRepository implements UserInterface
             $user_details->birthdate = $response['result']['birthdate'];
 
             $user->roles()->sync([$response['result']['role_id']]);
-            
+
             $user->save();
             $user_details->save();
 
@@ -135,7 +139,8 @@ class UserRepository implements UserInterface
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $user = User::find($id);
         $user->delete();
     }
@@ -159,16 +164,52 @@ class UserRepository implements UserInterface
     }
     public function find($data)
     {
-        if(gettype($data) !== 'string') {
-            $user = User::with(['user_detail','roles'])->where('users.id', $data)->first();
+        if (gettype($data) !== 'string') {
+            $user = User::with(['user_detail', 'roles'])->where('users.id', $data)->first();
             // $user = DB::table('users')
             // ->join('user_details', 'users.id', '=', 'user_details.user_id')
             // ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
             // ->where('users.id', $data)
             // ->first();
-        return $user;
+            return $user;
         } else {
-            return User::where('username',$data)->first();
+            return User::where('username', $data)->first();
+        }
+    }
+
+    public function getResults($data)
+    {
+        $result = User::with(['user_detail', 'roles'])
+
+            ->whereAny(['name', 'email', 'username'], 'LIKE', '%' . $data . '%')
+            ->orWhereHas('user_detail', function ($query) use ($data) {
+                $query->whereAny(['contact', 'address', 'birthdate'], 'LIKE', '%' . $data . '%');
+            })
+            ->orWhereHas('roles', function ($query) use ($data) {
+                $query->where('role', 'LIKE', '%' . $data . '%');
+            })
+            ->get();
+        return $result;
+    }
+
+    public function findModule($data)
+    {
+        $module = Permission::where('module_name', 'LIKE','%'.$data.'%' )->get();
+        return $module;
+    }
+
+    public function updateOrCreate($data)
+    {
+
+        try {
+            $snakeCaseData = Str::snake($data);
+
+            Permission::updateOrCreate([
+                'module_name' => $data,
+                'access_module_name' => $snakeCaseData
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error updating or creating user: ' . $e->getMessage());
         }
     }
 }

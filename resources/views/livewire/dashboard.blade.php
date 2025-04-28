@@ -18,9 +18,9 @@
                         <i class="fas fa-users mr-3 text-gray-500"></i>
                         Users
                     </a>
-                    <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <a href="#"  wire:click="$dispatch('openModal', {component: 'access-control', params: [] } )" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                         <i class="fas fa-user-shield mr-3 text-gray-500"></i>
-                        Roles & Permissions
+                        Access Control
                     </a>
 
                     <!-- Other Management Links -->
@@ -74,7 +74,7 @@
             <div x-show="activeView === 'staffList' " class="bg-white rounded-lg">
                 <livewire:staff-list>
             </div>
-            <div x-show=" activeView==='addUser'" class=" bg-white rounded-lg shadow p-6">
+            <div x-show=" activeView ==='addUser'" class=" bg-white rounded-lg shadow p-6">
                 <livewire:add-user>
             </div>
             <!-- <div class="bg-white rounded-lg shadow p-6">

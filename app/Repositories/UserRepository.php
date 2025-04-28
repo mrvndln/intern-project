@@ -198,6 +198,13 @@ class UserRepository implements UserInterface
         return $module;
     }
 
+    public function getModules()
+    {
+        $module = Permission::all();
+        return $module;
+    }
+
+
     public function updateOrCreate($data)
     {
 

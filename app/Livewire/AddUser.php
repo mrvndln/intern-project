@@ -2,17 +2,17 @@
 
 namespace App\Livewire;
 
-use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
-use App\Livewire\Forms\CreateUserForm;
+use App\Traits\BootUserRepository;
 use App\Traits\UserValidation;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class AddUser extends Component
 {
+    use BootUserRepository;
     use UserValidation;
 <<<<<<< HEAD
+
 
     protected $repository;
 
@@ -35,10 +35,9 @@ class AddUser extends Component
     #[Validate] public $role_id;
     #[Validate] public $roles;
     
-    public function boot(UserRepository $repository)
-    {
-        $this->repository = $repository;
-        $this->roles = $repository->getRoles();
+    
+    public function mount() {
+        $this->roles = $this->repository->getRoles();
     }
 
 <<<<<<< HEAD

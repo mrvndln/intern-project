@@ -1,4 +1,4 @@
-<div class="flex h-screen overflow-hidden">
+<div class="flex h-screen overflow-hidden" x-data={show:@entangle('show')}>
     <!-- Sidebar Navigation -->
     <div class="hidden md:flex md:flex-shrink-0">
         <div class="flex flex-col w-64 bg-white border-r border-gray-200">
@@ -18,7 +18,7 @@
                         <i class="fas fa-users mr-3 text-gray-500"></i>
                         Users
                     </a>
-                    <a href="#"  wire:click="$dispatch('openModal', {component: 'access-control', params: [] } )" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                <a href="#"  @click="activeView = 'access-control'"  class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                         <i class="fas fa-user-shield mr-3 text-gray-500"></i>
                         Access Control
                     </a>
@@ -74,9 +74,11 @@
             <div x-show="activeView === 'staffList' " class="bg-white rounded-lg">
                 <livewire:staff-list>
             </div>
-            <div x-show=" activeView ==='addUser'" class=" bg-white rounded-lg shadow p-6">
-                <livewire:add-user>
-            </div>
+            <div x-show="activeView === 'access-control'" class="flex justify-center bg-white rounded-lg shadow p-2">
+                <livewire:edit-role>
+            </div> 
+           
+            
             <!-- <div class="bg-white rounded-lg shadow p-6">
                     <div class="text-center py-12">
                         <i class="fas fa-users text-4xl text-gray-300 mb-4"></i>

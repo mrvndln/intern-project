@@ -2,16 +2,17 @@
 
 namespace App\Livewire;
 
-use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
-use App\Livewire\Forms\CreateUserForm;
+use App\Traits\BootUserRepository;
 use App\Traits\UserValidation;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class AddUser extends Component
 {
+    use BootUserRepository;
     use UserValidation;
+<<<<<<< HEAD
+
 
     protected $repository;
 
@@ -19,6 +20,10 @@ class AddUser extends Component
     {
         $this->repository = $repository;
     }
+=======
+
+    protected $repository;
+>>>>>>> 57c6a68 (Exclude role properties to reset)
 
     #[Validate] public $name;
     #[Validate] public $contact;
@@ -27,8 +32,18 @@ class AddUser extends Component
     #[Validate] public $birthdate;
     #[Validate] public $username;
     #[Validate] public $password;
+    #[Validate] public $role_id;
+    #[Validate] public $roles;
+    
+    
+    public function mount() {
+        $this->roles = $this->repository->getRoles();
+    }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57c6a68 (Exclude role properties to reset)
     protected function rules()
     {
         return $this->validation_rules_array('create');
@@ -38,8 +53,10 @@ class AddUser extends Component
     {
         return $this->validation_rules_messages('create');
     }
+    
     public function addUser()
     {
+    
         $validated = $this->validate();
 
         $this->repository->add($validated);
@@ -51,7 +68,7 @@ class AddUser extends Component
 
     public function clearInputs()
     {
-        $this->reset();
+        $this->reset(['name','contact','email','address','birthdate','username','password']);
     }
 
     public function render()

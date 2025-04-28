@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Repositories\UserRepository;
 use App\Traits\ResponseTrait;
-use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {

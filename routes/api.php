@@ -28,8 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout',[LogoutController::class,'logout']);
 });
 
-
-
 Route::post('/login',[LoginController::class,'login']);
 
 

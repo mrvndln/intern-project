@@ -27,10 +27,17 @@ return new class extends Migration
             $table->string('contact');
             $table->string('address');
             $table->date('birthdate');
-            $table->foreignId('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
+
+       
+
+
+
+
+
+
     }
 
     /**

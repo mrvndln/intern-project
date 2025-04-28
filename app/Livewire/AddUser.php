@@ -11,19 +11,8 @@ class AddUser extends Component
 {
     use BootUserRepository;
     use UserValidation;
-<<<<<<< HEAD
-
 
     protected $repository;
-
-    public function boot(UserRepository $repository)
-    {
-        $this->repository = $repository;
-    }
-=======
-
-    protected $repository;
->>>>>>> 57c6a68 (Exclude role properties to reset)
 
     #[Validate] public $name;
     #[Validate] public $contact;
@@ -40,10 +29,6 @@ class AddUser extends Component
         $this->roles = $this->repository->getRoles();
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 57c6a68 (Exclude role properties to reset)
     protected function rules()
     {
         return $this->validation_rules_array('create');

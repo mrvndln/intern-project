@@ -2,22 +2,21 @@
 
 namespace App\Livewire;
 
-use App\Repositories\UserRepository;
+use App\Traits\BootUserRepository;
 use App\Traits\UserValidation;
-use Livewire\Attributes\On;
 use Livewire\Component;
 
 class UpdateUser extends Component
-{
+{   
+    use BootUserRepository;
     use UserValidation;
 
     public $id;
     public $name, $contact, $email, $address, $birthdate, $username, $password, $current_role, $roles, $role_id;
     protected $repository;
 
-    public function boot(UserRepository $repository){
-        $this->repository = $repository;
-        $this->roles = $repository->getRoles();
+    public function mount(){
+        $this->roles = $this->repository->getRoles();
         $this->editUser($this->id); 
     }
 
@@ -25,7 +24,6 @@ class UpdateUser extends Component
     {
         return $this->validation_rules_array('update', $this->id);
     }
-
 
     public function editUser($id)
     {

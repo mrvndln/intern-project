@@ -51,7 +51,7 @@ class AddUser extends Component
         $this->dispatch('reload-list');
     }
 
-    public function clearInputs()
+    protected function clearInputs()
     {
         $this->reset(['name','contact','email','address','birthdate','username','password']);
     }

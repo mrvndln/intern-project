@@ -1,94 +1,68 @@
-<div wire:cloak id="addUserForm" class="bg-white rounded-lg p-10 w-[45rem]">
-  <div class="mb-2 flex justify-center">
-    <div class="font-bold text-2xl font-mono">Add User</div>
-  </div>
-  <form wire:submit.prevent="addUser" class="h-[27rem]">
-    <!-- Row 1: Full width -->
-    <div class="grid grid-cols-2 gap-4 h-[6rem]">
-      <div class="flex flex-col">
-        <label for="name">Full Name*</label>
-        <input wire:model.blur="name" name="name" type="text"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('name') border-red-500 @enderror"
-          placeholder="Enter full name">
-        @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-      </div>
+<div wire:cloak id="addUserForm">
+  <form wire:submit.prevent="addUser" class="relative px-4 py-6 space-y-6">
 
-      <div class="flex flex-col">
-        <label for="role">Role*</label>
-        <select wire:model.blur="role_id" name="role"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('role') border-red-500 @enderror">
-          <option value="">Select role</option>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-12">
+      <div class="flex flex-col relative">
+        <x-input wire:model.blur="name" label="Name" name="name" />
+        <x-input-error for="name" />
+      </div>  
+
+      <div class="flex flex-col relative">
+        <x-select wire:model.blur="role_id" name="role" label="Role">
+          <option value="" hidden selected>-- Assign a Role --</option>
           @foreach($roles as $role)
           <option value="{{ $role->id }}">{{ $role->role }}</option>
           @endforeach
-        </select>
-        @error('role_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+        </x-select>
+        <x-input-error for="role_id" />
       </div>
     </div>
 
-
-
-    <!-- Row 2: Two columns -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 h-[6rem]">
-      <div class="flex flex-col">
-        <label for="email">Email</label>
-        <input wire:model.blur="email" name="email" type="email"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('email') border-red-500 @enderror"
-          placeholder="Enter email">
-        @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-12">
+      <div class="flex flex-col relative">
+        <x-input wire:model.blur="email" label="Email" name="email" />
+        <x-input-error for="email" />
       </div>
-      <div class="flex flex-col">
-        <label for="contact">Contact Number*</label>
-        <input wire:model.blur="contact" name="contact" type="tel"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('contact') border-red-500 @enderror"
-          placeholder="Enter phone number">
-        @error('contact') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
+      <div class="flex flex-col relative">
+        <x-input wire:model.blur="contact" label="Contact" name="contact" type="tel" />
+        <x-input-error for="contact" />
       </div>
     </div>
 
-    <!-- Row 3: Two columns -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 h-[6rem]">
-      <div class="flex flex-col">
-        <label for="address">Address*</label>
-        <input wire:model.blur="address" name="address" type="text"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('address') border-red-500 @enderror"
-          placeholder="Enter address">
-        @error('address') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-12">
+      <div class="flex flex-col relative">
+        <x-input  wire:model.blur="address" label="Address" name="address" />
+        <x-input-error for="address" />
       </div>
-      <div class="flex flex-col">
-        <label for="birthdate">Birthdate*</label>
-        <input wire:model.blur="birthdate" name="birthdate" type="date"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('birthdate') border-red-500 @enderror">
-        @error('birthdate') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
+      <div class="flex flex-col relative">
+        <x-input  wire:model.blur="birthdate" label="Birthdate" name="birthdate" type="date" />
+        <x-input-error for="birthdate" />
       </div>
     </div>
 
-    <!-- Row 4: Two columns -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-      <div class="flex flex-col">
-        <label for="username">Username*</label>
-        <input wire:model.blur="username" name="username" type="text"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('username') border-red-500 @enderror"
-          placeholder="Choose username">
-        @error('username') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-12">
+      <div class="flex flex-col relative">
+        <x-input  wire:model.blur="username" label="Username" name="username" />
+        <x-input-error for="username" />
       </div>
-      <div class="flex flex-col">
-        <label for="password">Password*</label>
-        <input wire:model.blur="password" name="password" type="password"
-          class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('password') border-red-500 @enderror"
-          placeholder="Create password">
-        @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+
+      <div class="flex flex-col relative">
+        <x-input wire:model.blur="password" label="Password" name="password" type="password" />
+        <x-input-error for="password" />
       </div>
     </div>
 
-    <!-- Form Buttons -->
-    <div class="flex justify-end space-x-3">
-      <button wire:click="$dispatch('closeModal')" type="button" value="cancel" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300 transition-colors text-center">
-        Cancel
-      </button>
-      <button type="submit" class="px-4 py-2 bg-amber-400 rounded-md hover:bg-amber-300 transition-colors">
-        Create User
-      </button>
+   
+    <div class="flex flex-col sm:flex-row justify-end items-end gap-3 pt-6">
+      <x-button wire:click="addUser" class="px-4">
+        <x-slot:title>
+          Save
+        </x-slot>
+      </x-button>
     </div>
   </form>
+
+  <x-loading target="addUser" />
 </div>

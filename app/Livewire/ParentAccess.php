@@ -22,9 +22,16 @@ class ParentAccess extends Component
 
     public function updateOrSave()
     {
-        $this->repository->updateOrCreate($this->moduleName);
-        $this->dispatch('show-success-modal', message: 'Module Saved or Updated Successfully!');
-        $this->dispatch('closeModal');
+        if(empty($this->moduleName)){
+
+            
+        }else{
+            $this->repository->updateOrCreate($this->moduleName);
+            $this->dispatch('show-success-modal', message: 'Permission has been successfully added/updated!');
+            $this->dispatch('close-parent-access');
+            $this->dispatch('hide-permission-edit');
+        }
+       
     }
 
     public function searchField($data) {    

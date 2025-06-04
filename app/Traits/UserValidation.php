@@ -37,6 +37,8 @@ trait UserValidation
       'name.required' => 'Please fill out this field.',
       'name.min' => 'The name must be at least 6 characters.',
 
+      'role_id.required' => 'Please select a role.',
+
       'contact.required' => 'Please fill out this field.',
       'contact.min' => 'The contact must be at least 11 digits.',
       'contact.unique' => 'This contact number is already taken.',

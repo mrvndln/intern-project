@@ -8,7 +8,7 @@ use Livewire\Component;
 class GlobalModal extends Component
 {
     public $show = false;
-    public $parentAccess = false;
+    public $addPermissions = false;
     public $create_modal = false;
     public $edit_modal = false;
     public $component = '';
@@ -44,14 +44,14 @@ class GlobalModal extends Component
         $this->create_modal = false;
     }
 
-    #[On('open-parent-access')]
+    #[On('open-add-permissions')]
     public function openParentAccess() {
-        $this->parentAccess = true;
+        $this->addPermissions = true;
     }
 
-    #[On('close-parent-access')]
+    #[On('close-add-permissions')]
     public function closeParentAccess() {
-        $this->parentAccess = false;
+        $this->addPermissions = false;
     }
 
     public function render()

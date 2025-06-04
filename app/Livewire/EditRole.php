@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Traits\BootUserRepository;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class EditRole extends Component
@@ -15,6 +16,12 @@ class EditRole extends Component
     {
         $this->modules = $this->repository->getModules();
         $this->roles = $this->repository->getRoles();
+    }
+
+    #[On('close-parent-access')]
+    public function reloadModuleList() 
+    {
+        $this->modules = $this->repository->getModules();
     }
 
     public function searchModule()

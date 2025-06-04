@@ -9,6 +9,7 @@ class SearchUser extends Component
     public $searchInput;
 
     public function search(){
+
         $this->dispatch('search-user', data: $this->searchInput);
     }
 

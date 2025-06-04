@@ -1,4 +1,4 @@
-<div wire:cloak>
+<div wire:cloak class="w-full">
     <table class="min-w-full border">
         <thead>
             <tr class="bg-gray-200">

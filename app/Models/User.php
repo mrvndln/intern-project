@@ -25,14 +25,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
             'email',
             'username',
             'password',
+            'role_id',
         ];
 
         public function user_detail():HasOne {
             return $this->hasOne(UserDetails::class);
         }
 
-        public function roles(): BelongsToMany {
-            return $this->belongsToMany(Role::class,'role_user');
+        public function role(): BelongsTo {
+            return $this->belongsTo(Role::class);
         }
 
     /**

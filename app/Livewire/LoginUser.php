@@ -14,17 +14,17 @@ use Livewire\Component;
 class LoginUser extends Component
 {
     public $username, $password, $errorMessage;
-    protected $rules = [
-        'username' => 'required|min:6',
-        'password' => 'required|min:8',
-    ];
+    // protected $rules = [
+    //     'username' => 'required',
+    //     'password' => 'required',
+    // ];
     public function login(Request $request) {
 
-        $this->resetErrorBag('username');
-        $this->resetErrorBag('password');
-        $this->errorMessage = '';
+        // $this->resetErrorBag('username');
+        // $this->resetErrorBag('password');
+        // $this->errorMessage = '';
 
-        $this->validate();
+        // $this->validate();
 
         $credentials = [
             'username' => $this->username, 
@@ -35,8 +35,8 @@ class LoginUser extends Component
             $request->session()->regenerate();
             return redirect()->route('user-management');
         }   
-            $this->resetErrorBag('username');
-            $this->resetErrorBag('password'); 
+            // $this->resetErrorBag('username');
+            // $this->resetErrorBag('password'); 
             $this->errorMessage = 'The username or password is incorrect.';   
 
          $this->reset(['username', 'password']);

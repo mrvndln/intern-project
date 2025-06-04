@@ -34,13 +34,13 @@
 
             <!-- User Profile & Logout -->
             <div class="p-4 border-t border-gray-200">
-                <div class="flex items-center mb-3">
+                <!-- <div class="flex items-center mb-3">
                     <img class="w-8 h-8 rounded-full" src="" alt="Admin">
                     <div class="ml-3">
                         <p class="text-sm font-medium text-gray-700">Admin</p>
                         <p class="text-xs text-gray-500">admin@example.com</p>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

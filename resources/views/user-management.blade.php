@@ -11,11 +11,7 @@
     @livewireStyles
 </head>
 
-<body x-data="{ activeView: 'None',  
-                
-               
-}"
-    class="bg-gray-50 font-sans">
+<body class="bg-gray-50 font-sans">
     <livewire:dashboard>
         <livewire:global-modal>
             @livewireScripts

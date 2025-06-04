@@ -19,14 +19,16 @@ class UserRepository implements UserInterface
 {
 
     use ResponseTrait;
+    public $result;
 
     public function getAll()
     {
-        $users = User::with(['user_detail','roles'])->get();
-        // $users = DB::table('users')
-        //     ->join('user_details', 'users.id', '=', 'user_details.user_id')
-        //     ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
-        //     ->get();
+
+        $users = DB::table('users')
+            ->join('user_details', 'users.id', '=', 'user_details.user_id')
+            ->join('roles', 'users.role_id', '=', 'roles.id')
+            ->select('users.*', 'roles.role', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+            ->get();
         return $users;
     }
 
@@ -87,7 +89,8 @@ class UserRepository implements UserInterface
                 'name' => $response['result']['name'],
                 'email' => $response['result']['email'],
                 'username' => $response['result']['username'],
-                'password' => $response['result']['password']
+                'role_id' => $response['result']['role_id'],
+                'password' => $response['result']['password'],
             ]);
 
             $user->user_detail()->create([
@@ -95,8 +98,6 @@ class UserRepository implements UserInterface
                 'address' => $response['result']['address'],
                 'birthdate' => $response['result']['birthdate'],
             ]);
-
-            $user->roles()->sync([$response['result']['role_id']]);
 
             return $this->response($response['code'], $response['message'], $response['result']);
         } catch (\Exception $e) {
@@ -117,6 +118,7 @@ class UserRepository implements UserInterface
             $user->name = $response['result']['name'];
             $user->email = $response['result']['email'];
             $user->username = $response['result']['username'];
+            $user->role_id =  $response['result']['role_id'];
 
             if (!is_null($response['result']['password'])) {
                 $user->password = $response['result']['password'];
@@ -128,7 +130,6 @@ class UserRepository implements UserInterface
             $user_details->address = $response['result']['address'];
             $user_details->birthdate = $response['result']['birthdate'];
 
-            $user->roles()->sync([$response['result']['role_id']]);
 
             $user->save();
             $user_details->save();
@@ -165,36 +166,42 @@ class UserRepository implements UserInterface
     public function find($data)
     {
         if (gettype($data) !== 'string') {
-            $user = User::with(['user_detail', 'roles'])->where('users.id', $data)->first();
-            // $user = DB::table('users')
-            // ->join('user_details', 'users.id', '=', 'user_details.user_id')
-            // ->select('users.*', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
-            // ->where('users.id', $data)
-            // ->first();
+            $user = DB::table('users')
+                ->join('roles', 'users.role_id', '=', 'roles.id')
+                ->join('user_details', 'users.id', '=', 'user_details.user_id')
+                ->select('users.*', 'roles.role', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+                ->where('users.id', $data)
+                ->first();
             return $user;
         } else {
             return User::where('username', $data)->first();
         }
     }
 
-    public function getResults($data)
+    public function getResults($data, $searchId)
     {
-        $result = User::with(['user_detail', 'roles'])
-
-            ->whereAny(['name', 'email', 'username'], 'LIKE', '%' . $data . '%')
-            ->orWhereHas('user_detail', function ($query) use ($data) {
-                $query->whereAny(['contact', 'address', 'birthdate'], 'LIKE', '%' . $data . '%');
-            })
-            ->orWhereHas('roles', function ($query) use ($data) {
-                $query->where('role', 'LIKE', '%' . $data . '%');
-            })
-            ->get();
-        return $result;
+        if ($searchId == 'user-list') {
+            try {
+                $user = DB::table('users')
+                    ->join('roles', 'users.role_id', '=', 'roles.id')
+                    ->join('user_details', 'users.id', '=', 'user_details.user_id')
+                    ->select('users.*', 'roles.role', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+                    ->whereAny(['name', 'email', 'username','user_details.contact','user_details.address', 'user_details.birthdate'], 'LIKE', $data . '%')
+                    ->orWhere('roles.role','LIKE',  $data . '%')
+                    ->get();
+                return $user;
+            } catch (\Exception $e) {
+                Log::error('Error: ' . $e->getMessage());
+            }
+        } else {
+            $roles = Role::where('role', 'LIKE',  $data . '%')->get();
+            return $roles;
+        }
     }
-
+ 
     public function findModule($data)
     {
-        $module = Permission::where('module_name', 'LIKE','%'.$data.'%' )->get();
+        $module = Permission::where('module_name', 'LIKE',  $data . '%')->get();
         return $module;
     }
 
@@ -204,17 +211,61 @@ class UserRepository implements UserInterface
         return $module;
     }
 
+    public function addRolePermission($selectedPermissions, $roleId)
+    {
+        
+        DB::table('role_permissions')
+        ->where('role_id', $roleId)
+        ->whereNotIn('permission_id',$selectedPermissions)
+        ->delete();
+
+        foreach ($selectedPermissions as $permissionId) {
+            
+            $exists = DB::table('role_permissions')
+                ->where('role_id', $roleId)
+                ->where('permission_id', $permissionId)
+                ->exists();
+        
+            if (!$exists) {
+                DB::table('role_permissions')->insert([
+                    'role_id' => $roleId, 
+                    'permission_id' => $permissionId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                // DB::table('role_permissions')->insertOrIgnore([
+                //     'role_id' => $roleId, 
+                //     'permission_id' => $permissionId,
+                //     'created_at' => now(),
+                //     'updated_at' => now(),
+                // ]);
+                
+            }
+        }
+    }
+
+    public function getRolePermissions($roleId)
+    {
+        $permissions = DB::table('role_permissions')
+                        ->where('role_id',$roleId)
+                        ->pluck('permission_id')
+                        ->toArray();
+        return $permissions;
+    }
+
 
     public function updateOrCreate($data)
     {
 
         try {
-            $snakeCaseData = Str::snake($data);
 
-            Permission::updateOrCreate([
-                'module_name' => $data,
-                'access_module_name' => $snakeCaseData
-            ]);
+            $module_name = Str::of($data)->title();
+
+            Permission::updateOrCreate(
+                ['module_name' => $module_name],
+                ['access_module_name' => Str::replace(' ', '-', strtolower($data))]
+            );
         } catch (\Exception $e) {
             Log::error('Error updating or creating user: ' . $e->getMessage());
         }

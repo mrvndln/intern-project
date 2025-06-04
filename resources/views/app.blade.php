@@ -8,7 +8,7 @@
     <title>App</title>
 </head>
 
-<body class="bg-slate-900 flex justify-center items-center">
+<body class="bg-slate-900 flex justify-center items-center h-svh">
     <livewire:login-user>
     @livewireScripts
 </body>

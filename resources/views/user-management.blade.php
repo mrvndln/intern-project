@@ -12,8 +12,8 @@
 </head>
 
 <body x-data="{ activeView: 'None',  
-                showSuccess: false,
-                showModal: false
+                
+               
 }"
     class="bg-gray-50 font-sans">
     <livewire:dashboard>
@@ -58,7 +58,6 @@
                     );
                 });
             </script>
-
 </body>
 
 </html>

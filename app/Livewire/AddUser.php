@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Traits\BootUserRepository;
 use App\Traits\UserValidation;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -24,7 +25,7 @@ class AddUser extends Component
     #[Validate] public $role_id;
     #[Validate] public $roles;
     
-    
+ 
     public function mount() {
         $this->roles = $this->repository->getRoles();
     }
@@ -43,7 +44,7 @@ class AddUser extends Component
     {
     
         $validated = $this->validate();
-
+ 
         $this->repository->add($validated);
         $this->dispatch('show-success-modal', message: 'User added successfully!');
         $this->clearInputs();
@@ -51,9 +52,11 @@ class AddUser extends Component
         $this->dispatch('reload-list');
     }
 
-    protected function clearInputs()
+    #[On('reset-form')]
+    public function clearInputs()
     {
-        $this->reset(['name','contact','email','address','birthdate','username','password']);
+        $this->reset(['name','contact','email','address','birthdate','username','password','role_id']);
+        $this->resetValidation();
     }
 
     public function render()

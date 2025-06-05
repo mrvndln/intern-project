@@ -12,7 +12,7 @@
             </div>
     </div>  
 
-    <table class="min-w-full border">
+    <table class="min-w-full border text-[15px]">
         <thead>
             <tr class="bg-gray-200">
                 <th class="py-2 px-4 border">Name</th>

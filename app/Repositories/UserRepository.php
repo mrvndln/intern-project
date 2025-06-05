@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Interfaces\UserInterface;
-use App\Models\AccessControl;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;

@@ -27,6 +27,7 @@ class UserRepository implements UserInterface
             ->join('user_details', 'users.id', '=', 'user_details.user_id')
             ->join('roles', 'users.role_id', '=', 'roles.id')
             ->select('users.*', 'roles.role', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
+            ->where('is_active',1)
             ->get();
         return $users;
     }
@@ -184,6 +185,7 @@ class UserRepository implements UserInterface
                 $user = DB::table('users')
                     ->join('roles', 'users.role_id', '=', 'roles.id')
                     ->join('user_details', 'users.id', '=', 'user_details.user_id')
+                    ->where('is_active',1)
                     ->select('users.*', 'roles.role', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
                     ->whereAny(['name', 'email', 'username','user_details.contact','user_details.address', 'user_details.birthdate'], 'LIKE', $data . '%')
                     ->orWhere('roles.role','LIKE',  $data . '%')
@@ -268,5 +270,17 @@ class UserRepository implements UserInterface
         } catch (\Exception $e) {
             Log::error('Error updating or creating user: ' . $e->getMessage());
         }
+    }
+
+    public function totalUsers()
+    {
+        $totalUsers = DB::table('users')->count();
+        return $totalUsers;
+    }
+
+    public function activeUsers()
+    {
+        $activeUsers = DB::table('users')->where('is_active',1)->count();
+          return $activeUsers;
     }
 }

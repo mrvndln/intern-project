@@ -4,12 +4,13 @@ namespace App\Livewire;
 
 use App\Traits\BootUserRepository;
 use App\Traits\UserValidation;
+use App\Traits\ValidationTrait;
 use Livewire\Component;
 
 class UpdateUser extends Component
 {
     use BootUserRepository;
-    use UserValidation;
+    use ValidationTrait;
 
     public $id;
     public $name, $contact, $email, $address, $birthdate, $username, $password, $currentRole_id, $current_role, $roles, $role_id;

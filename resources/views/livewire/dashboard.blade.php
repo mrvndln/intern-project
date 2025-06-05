@@ -12,7 +12,7 @@
             <div class="flex-1 overflow-y-auto">
                 <nav class="px-2 py-4">
                     <!-- Dashboard Link -->
-                    <a href="#"  wire:click="$set('activeView','dashboard')" class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-lg">
+                    <a href="#" wire:click="$set('activeView','dashboard')" class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-lg">
                         <i class="fas fa-tachometer-alt mr-3 text-gray-500"></i>
                         Dashboard
                     </a>
@@ -23,7 +23,7 @@
                         Users
                     </a>
                     <!-- Other Management Links -->
-                     @can('settings')
+                    @can('settings')
                     <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                         <i class="fas fa-cog mr-3 text-gray-500"></i>
                         Settings
@@ -73,7 +73,7 @@
         <main class="p-4 sm:p-6">
             <!-- This is where your content will go -->
             <div x-show="activeView === 'dashboard'">
-                <div class="max-w-sm p-4 bg-white rounded-2xl shadow-md flex items-center gap-4">
+                <div class="max-w-xs p-4 bg-white rounded-2xl shadow-md flex items-center gap-4">
                     <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
                         <!-- User icon (Heroicons or Lucide) -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
@@ -82,11 +82,26 @@
                                 d="M5.121 17.804A9 9 0 0112 15c2.485 0 4.735.998 6.379 2.621M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
-                    <div>
-                        <h4 class="text-sm text-gray-500">Users</h4>
-                        <p class="text-2xl font-bold text-gray-800">1,234</p>
-                        <p class="text-sm text-green-600 mt-1">+8% this week</p>
+                    <div> <!-- Card -->
+                        <h4 class="text-sm text-gray-500 mb-2">Users</h4>
+
+                        <!-- Total and Active side-by-side -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-800">{{ $totalUsers }}</p>
+                                <p class="text-xs text-gray-500">Total</p>
+                            </div>
+                            <div class="border-l border-gray-300 h-8 mx-4"></div>
+                            <div>
+                                <p class="text-2xl font-bold text-green-700">{{ $activeUsers }}</p>
+                                <p class="text-xs text-gray-500">Active</p>
+                            </div>
+                        </div>
+
+                        <!-- <p class="text-sm text-green-600 mt-3">+8% this week</p> -->
                     </div>
+
+
                 </div>
 
             </div>

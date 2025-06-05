@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Traits\BootUserRepository;
 use App\Traits\UserValidation;
+use App\Traits\ValidationTrait;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -11,7 +12,7 @@ use Livewire\Component;
 class AddUser extends Component
 {
     use BootUserRepository;
-    use UserValidation;
+    use ValidationTrait;
 
     protected $repository;
 

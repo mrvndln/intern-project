@@ -12,7 +12,7 @@
         </div>
         <h1 class="text-xl text-gray-800 font-semibold">Permissions</h1>
         <p class="mb-2 text-gray-800">Assign permissions to roles to give them access to modules.</p>
-        <div class="flex space-x-2 justify-between">
+        <div class="flex justify-between">
             <div x-show="editButton">
                 <x-button  @click="$wire.editing=false; $wire.isHidden=true;" class="px-4">
                     <x-slot:title>

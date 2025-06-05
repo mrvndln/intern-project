@@ -19,4 +19,7 @@ interface UserInterface{
     public function getRolePermissions($roleId);
 
     public function getResults($data, $searchId);
+
+    public function totalUsers();
+    public function activeUsers();
 }

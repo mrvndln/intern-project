@@ -6,7 +6,7 @@ trait ValidationTrait
 {
   public function validation_rules_array($type)
   {
-    if ($type !== 'create') {
+    if ($type == 'update') {
       return [
         'name' => 'required|min:6',
         'role_id' => 'sometimes',
@@ -17,18 +17,20 @@ trait ValidationTrait
         'username' => 'required|min:6',
         'password' => 'sometimes',
       ];
+    } elseif ($type == 'create') {
+      return [
+        'name' => 'required',
+        'role_id' => 'required',
+        'contact' => 'required|min:11|unique:user_details,contact',
+        'email' => 'required|email',
+        'address' => 'required|min:10',
+        'birthdate' => 'required',
+        'username' => 'required|min:6|unique:users,username',
+        'password' => 'required|min:6',
+      ];
+    } else {
+      return ['moduleName' => 'required'];
     }
-
-    return [
-      'name' => 'required',
-      'role_id' => 'required',
-      'contact' => 'required|min:11|unique:user_details,contact',
-      'email' => 'required|email',
-      'address' => 'required|min:10',
-      'birthdate' => 'required',
-      'username' => 'required|min:6|unique:users,username',
-      'password' => 'required|min:6',
-    ];
   }
 
   public function validation_rules_messages($type)

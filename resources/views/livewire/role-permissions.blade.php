@@ -1,4 +1,4 @@
-    <div x-data="{
+    <div  class="text-gray-800" x-data="{
         isHidden: @entangle('isHidden'),
         editButton: @entangle('editing'),
     }">

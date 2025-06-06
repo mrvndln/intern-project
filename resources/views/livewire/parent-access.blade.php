@@ -3,9 +3,13 @@
         <div class="font-bold text-lg mb-4 mr-auto font-mono">Add Permission</div>
         <div class="w-full">
             <div class="h-[10rem]">
-                <input wire:model="moduleName" wire:keydown="suggestModule" name="query" type="search"
-                    class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('name') border-red-500 @enderror"
+                <input wire:model="moduleName" wire:keydown="suggestModule" id="search" name="search" type="search"
+                    class="border-2 w-full rounded-md h-9 shadow-sm px-3 @error('moduleName') border-red-500 @enderror"
                     placeholder="Search" autocomplete="off">
+                   @error('moduleName')
+                    <p class="text-red-500 text-sm">Enter a module.</p>
+                   @enderror
+
 
                 @if($suggestions !== null && $moduleName !== '')
                 @foreach($suggestions as $suggestion)

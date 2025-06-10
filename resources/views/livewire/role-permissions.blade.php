@@ -51,7 +51,7 @@
             @forelse( $moduleResults as $module )
             <div  wire:key="{{ $module->id }}" class="flex items-center mb-4">
                 <label class="font-medium">
-                    <input x-bind:disabled="editButton" wire:model="selectedPermissions" value="{{ $module->id }}" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
+                    <input x-bind:disabled="editButton" wire:model="selectedPermissions" value="{{ $module->id }}" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                     {{ $module->module_name }}
                 </label>
             </div>

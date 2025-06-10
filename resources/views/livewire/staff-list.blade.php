@@ -1,6 +1,6 @@
 <div wire:cloak>
     <div class="flex items-center w-full p-2">
-         <x-search  wire:model="searchInput" wire:keydown="search" name="query" type="search"
+         <x-search  wire:model="searchInput" wire:keydown="searchUser" name="query" type="search"
         class="border-2 w-full rounded-md h-9 shadow-sm px-3 focus:outline-gray-300"
         placeholder="Search" />
 
@@ -12,7 +12,7 @@
             </div>
     </div>  
 
-    <table class="min-w-full border text-[15px]">
+    <table class="min-w-full border text-gray-800 text-[15px]">
         <thead>
             <tr class="bg-gray-200">
                 <th class="py-2 px-4 border">Name</th>

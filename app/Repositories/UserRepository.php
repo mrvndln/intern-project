@@ -8,10 +8,12 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\UserDetails;
 use App\Traits\ResponseTrait;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Log;
+use PDO;
 use Str;
 
 class UserRepository implements UserInterface
@@ -27,7 +29,7 @@ class UserRepository implements UserInterface
             ->join('user_details', 'users.id', '=', 'user_details.user_id')
             ->join('roles', 'users.role_id', '=', 'roles.id')
             ->select('users.*', 'roles.role', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
-            ->where('is_active',1)
+            ->where('is_active', 1)
             ->get();
         return $users;
     }
@@ -185,11 +187,12 @@ class UserRepository implements UserInterface
                 $user = DB::table('users')
                     ->join('roles', 'users.role_id', '=', 'roles.id')
                     ->join('user_details', 'users.id', '=', 'user_details.user_id')
-                    ->where('is_active',1)
                     ->select('users.*', 'roles.role', 'user_details.contact', 'user_details.address', 'user_details.birthdate')
-                    ->whereAny(['name', 'email', 'username','user_details.contact','user_details.address', 'user_details.birthdate'], 'LIKE', $data . '%')
-                    ->orWhere('roles.role','LIKE',  $data . '%')
-                    ->get();
+                    ->where('is_active', '=', 1)
+                    ->where(function (Builder $query) use ($data) {
+                        $query->whereAny(['name', 'email', 'username', 'user_details.contact', 'user_details.address', 'user_details.birthdate'], 'LIKE', $data . '%')
+                        ->orWhere('roles.role', 'LIKE',  $data . '%');
+                    })->get();
                 return $user;
             } catch (\Exception $e) {
                 Log::error('Error: ' . $e->getMessage());
@@ -199,7 +202,7 @@ class UserRepository implements UserInterface
             return $roles;
         }
     }
- 
+
     public function findModule($data)
     {
         $module = Permission::where('module_name', 'LIKE',  $data . '%')->get();
@@ -214,22 +217,22 @@ class UserRepository implements UserInterface
 
     public function addRolePermission($selectedPermissions, $roleId)
     {
-        
+
         DB::table('role_permissions')
-        ->where('role_id', $roleId)
-        ->whereNotIn('permission_id',$selectedPermissions)
-        ->delete();
+            ->where('role_id', $roleId)
+            ->whereNotIn('permission_id', $selectedPermissions)
+            ->delete();
 
         foreach ($selectedPermissions as $permissionId) {
-            
+
             $exists = DB::table('role_permissions')
                 ->where('role_id', $roleId)
                 ->where('permission_id', $permissionId)
                 ->exists();
-        
+
             if (!$exists) {
                 DB::table('role_permissions')->insert([
-                    'role_id' => $roleId, 
+                    'role_id' => $roleId,
                     'permission_id' => $permissionId,
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -241,7 +244,7 @@ class UserRepository implements UserInterface
                 //     'created_at' => now(),
                 //     'updated_at' => now(),
                 // ]);
-                
+
             }
         }
     }
@@ -280,7 +283,7 @@ class UserRepository implements UserInterface
 
     public function activeUsers()
     {
-        $activeUsers = DB::table('users')->where('is_active',1)->count();
-          return $activeUsers;
+        $activeUsers = DB::table('users')->where('is_active', 1)->count();
+        return $activeUsers;
     }
 }

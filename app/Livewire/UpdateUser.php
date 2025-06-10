@@ -45,7 +45,6 @@ class UpdateUser extends Component
 
     public function updateUser()
     {
-
         $validated = $this->validate();
         
         $this->repository->update($validated, $this->id);

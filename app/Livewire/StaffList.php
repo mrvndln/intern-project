@@ -28,14 +28,10 @@ class StaffList extends Component
         $this->users = $this->repository->getAll();
     }
 
-    #[On('search-user')]
-    public function searchUser($data, $searchId){
-
-        if(!isset($data)){
-            $this->users = false;
-        }
+    // #[On('search-user')]
+    public function searchUser(){
         $this->reset(['users']);
-        $this->users = $this->repository->getResults($data, $searchId);
+        $this->users = $this->repository->getResults($this->searchInput, 'user-list');
     }
 
     public function triggerDelete($id) {
@@ -48,10 +44,6 @@ class StaffList extends Component
         $this->users = $this->repository->getAll(); 
         $this->dispatch('user-deleted');   
     }   
-
-    public function search(){
-        $this->dispatch('search-user', data: $this->searchInput, searchId: 'user-list');
-    }
 
     public function render()
     {

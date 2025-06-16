@@ -2,15 +2,19 @@
 
 namespace App\Livewire;
 
+use App\Traits\BootTrait;
 use App\Traits\BootUserRepository;
+use App\Traits\BootUserTrait;
+use App\Traits\ConstTrait;
 use App\Traits\UserValidation;
 use App\Traits\ValidationTrait;
 use Livewire\Component;
 
 class UpdateUser extends Component
 {
-    use BootUserRepository;
+    use BootTrait;
     use ValidationTrait;
+    use ConstTrait;
 
     public $id;
     public $name, $contact, $email, $address, $birthdate, $username, $password, $currentRole_id, $current_role, $roles, $role_id;
@@ -18,18 +22,23 @@ class UpdateUser extends Component
 
     public function mount()
     {
-        $this->roles = $this->repository->getRoles();
+        $this->roles = $this->user_repo->getRoles();
         $this->editUser($this->id);
     }
 
     protected function rules()
     {
-        return $this->validation_rules_array('update', $this->id);
+        return $this->validation_rules_array(self::TYPE_USER,self::ACTION_UPDATE);
+    }
+
+    protected function messages()
+    {
+        return $this->validation_rules_messages(self::TYPE_USER);
     }
 
     public function editUser($id)
     {
-        $user = $this->repository->find($id);
+        $user = $this->user_repo->find($id);
         
         $this->id = $user->id ?? "";
         $this->name = $user->name ?? "";
@@ -47,7 +56,7 @@ class UpdateUser extends Component
     {
         $validated = $this->validate();
         
-        $this->repository->update($validated, $this->id);
+        $this->user_repo->update($validated, $this->id);
         $this->dispatch('show-success-modal', message: 'User updated successfully!');
         $this->dispatch('reload-list');
         $this->dispatch('closeModal');

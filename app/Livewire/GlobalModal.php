@@ -11,8 +11,10 @@ class GlobalModal extends Component
     public $addPermissions = false;
     public $create_modal = false;
     public $edit_modal = false;
+    public $editPatient_modal = false;
+    public $add_patient = false;
     public $component = '';
-    public $user_id;  
+    public $user_id;    
     public $params = [];
     
     #[On('openModal')]
@@ -34,14 +36,28 @@ class GlobalModal extends Component
         if($this->params){
             $this->edit_modal = true;
         }
-       
     }
 
-    #[On('closeModal')]
+    #[On('editPatient_modal')]
+    public function open_editPatient_modal($params){
+        $this->params = $params;
+
+        if($this->params){
+            $this->editPatient_modal = true;
+        }
+    }
+
+    #[On('addPatient_modal')]
+    public function open_addPatient_modal(){
+        $this->add_patient = true;
+    }
+
+    #[On('closeModal')] // listens if the create user form is saved.
     public function closeModal() {
         $this->dispatch('reload-list');
         $this->reset();
         $this->create_modal = false;
+       
     }
 
     #[On('open-add-permissions')]

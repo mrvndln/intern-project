@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Traits\BootTrait;
 use App\Traits\BootUserRepository;
 use App\Traits\UserValidation;
 use App\Traits\ValidationTrait;
@@ -11,7 +12,7 @@ use Livewire\Component;
 class ParentAccess extends Component
 {
 
-    use BootUserRepository;
+    use BootTrait;
     use ValidationTrait;
 
     protected $repository;
@@ -29,7 +30,7 @@ class ParentAccess extends Component
     {
         $this->reset(['suggestions']);
         $this->resetValidation();
-        $this->suggestions = $this->repository->findModule($this->moduleName);
+        $this->suggestions = $this->user_repo->findModule($this->moduleName);
     }
 
     public function updateOrSave()

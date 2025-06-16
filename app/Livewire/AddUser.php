@@ -2,7 +2,10 @@
 
 namespace App\Livewire;
 
+use App\Traits\BootTrait;
 use App\Traits\BootUserRepository;
+use App\Traits\BootUserTrait;
+use App\Traits\ConstTrait;
 use App\Traits\UserValidation;
 use App\Traits\ValidationTrait;
 use Livewire\Attributes\On;
@@ -11,8 +14,9 @@ use Livewire\Component;
 
 class AddUser extends Component
 {
-    use BootUserRepository;
+    use BootTrait;
     use ValidationTrait;
+    use ConstTrait;
 
     protected $repository;
 
@@ -26,27 +30,31 @@ class AddUser extends Component
     #[Validate] public $role_id;
     #[Validate] public $roles;
     
+   
+    
  
     public function mount() {
-        $this->roles = $this->repository->getRoles();
+        $this->roles = $this->user_repo->getRoles();
     }
 
     protected function rules()
     {
-        return $this->validation_rules_array('create');
+        return $this->validation_rules_array(self::TYPE_USER,self::ACTION_CREATE);
     }
 
     protected function messages()
     {
-        return $this->validation_rules_messages('create');
+        return $this->validation_rules_messages(self::TYPE_USER);
     }
     
     public function addUser()
     {
     
         $validated = $this->validate();
- 
-        $this->repository->add($validated);
+        
+        $type_user = $this->type_user;
+
+        $this->user_repo->add($type_user,$validated);
         $this->dispatch('show-success-modal', message: 'User added successfully!');
         $this->clearInputs();
         $this->dispatch('closeModal');

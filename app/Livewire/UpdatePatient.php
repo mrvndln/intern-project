@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Traits\BootPatient;
 use App\Traits\BootPatientTrait;
+use App\Traits\BootTrait;
 use App\Traits\BootUserRepository;
 use App\Traits\ConstTrait;
 use App\Traits\ValidationTrait;
@@ -11,7 +12,7 @@ use Livewire\Component;
 
 class UpdatePatient extends Component
 {
-    use BootPatientTrait;
+    use BootTrait;
     use ValidationTrait;
     use ConstTrait;
 

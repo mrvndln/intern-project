@@ -29,7 +29,7 @@
                     });
                 });
 
-                Livewire.on('triggerDelete', (userId) => {
+                Livewire.on('confirmDeleteUser', (id    ) => {
                     Swal.fire({
                         title: "Are you sure?",
                         text: "You won't be able to revert this!",
@@ -40,8 +40,25 @@
                         confirmButtonText: "Yes, delete it!"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.Livewire.dispatch('deleteUser', userId);
-                            console.log(userId)
+                            window.Livewire.dispatch('deleteUser', id); 
+                            console.log(id)
+                        }
+                    });
+                });
+
+                Livewire.on('confirmDeletePatient', (id) => {
+                    Swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, delete it!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.Livewire.dispatch('deletePatient', id); 
+                            console.log(id)
                         }
                     });
                 });
@@ -50,6 +67,14 @@
                     Swal.fire(
                         'Deleted!',
                         'User has been deleted.',
+                        'success'
+                    );
+                });
+
+                window.addEventListener('patient-deleted', () => {
+                    Swal.fire(
+                        'Deleted!',
+                        'Patient has been deleted.',
                         'success'
                     );
                 });

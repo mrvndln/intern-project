@@ -2,27 +2,56 @@
 
 namespace App\Livewire;
 
-use App\Traits\BootUserRepository;
+use App\Traits\BootTrait;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
-    use BootUserRepository;
+    use BootTrait;
 
+    public $pageTitle = 'Dashboard';
     public $activeView = 'dashboard';
     public $totalUsers, $activeUsers;
+    public $totalPatients, $activePatients;
 
     public function mount()
     {
-        $this->totalUsers = $this->repository->totalUsers();
-        $this->activeUsers = $this->repository->activeUsers();
+        $this->totalUsers = $this->user_repo->totalUsers();
+        $this->activeUsers = $this->user_repo->activeUsers();
+        $this->activePatients = $this->patient_repo->activePatients();
+        $this->totalPatients = $this->patient_repo->totalPatients();
     }
+
+    public function navPage($pageTitle)
+    {
+        $this->activeView = $pageTitle;
+
+        switch ($this->activeView) {
+            case 'userManagement':
+                $this->pageTitle = 'Users';
+                break;
+
+            case 'patientManagement':
+                $this->pageTitle = 'Patients';
+                break;
+
+            case 'dashboard':
+                $this->pageTitle = 'Dashboard';
+                break;
+
+            default:
+                $this->pageTitle = 'Dashboard';
+                break;
+        }
+    }
+
 
     #[On('manage_roles')]
     public function openManageRoles($value)
     {
         $this->activeView = $value;
+        $this->pageTitle = 'Manage Roles';
     }
 
     #[On('role_permissions')]

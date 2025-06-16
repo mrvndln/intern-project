@@ -2,13 +2,15 @@
 
 namespace App\Livewire;
 
+use App\Traits\BootTrait;
 use App\Traits\BootUserRepository;
+use App\Traits\BootUserTrait;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class RolePermissions extends Component
 {
-    use BootUserRepository;
+    use BootTrait;
 
     public $selectedRole;
     public $roleId;
@@ -21,29 +23,10 @@ class RolePermissions extends Component
     public $editing = true;
     public $isHidden = false;
 
-    use BootUserRepository;
-
-
     public function mount()
     {
-        $this->moduleResults = $this->repository->getModules();
+        $this->moduleResults = $this->user_repo->getModules();
     }
-
-    // public function togglePermission($id)
-    // {
-    //     // $this->toggledModule = array_unique(
-    //     //     array_merge($this->toggledModule, [$id])
-    //     // );        
-
-    //     if (in_array($id, $this->selectedPermissions)) {
-    //         $this->selectedPermissions = array_diff($this->selectedPermissions, [$id]);
-    //         // $this->repository->addRolePermission($this->selectedPermissions, $this->roleId);
-    //     } else {
-    //         $this->selectedPermissions[] = $id;
-    //         // $this->repository->addRolePermission($this->selectedPermissions, $this->roleId);
-    //     }
-    // }
-
 
     #[On('role_permissions')]
     public function setHeader($role, $roleId)
@@ -51,54 +34,46 @@ class RolePermissions extends Component
         $this->roleId = $roleId;
         $this->selectedRole = $role;
 
-        $permissions =  $this->repository->getRolePermissions($roleId);
+        $permissions =  $this->user_repo->getRolePermissions($roleId);
 
         $this->selectedPermissions = $permissions;
         $this->originalPermissions = $permissions;
-
     }
 
     public function showModules()
     {
-
         if (strlen($this->moduleSearch) > 0) {
-            $this->moduleResults = $this->repository->findModule($this->moduleSearch);
+            $this->moduleResults = $this->user_repo->findModule($this->moduleSearch);
         } else {
-            $this->moduleResults = $this->repository->getModules();
+            $this->moduleResults = $this->user_repo->getModules();
         }
     }
 
     public function save()
     {
-    
-        $this->repository->addRolePermission($this->selectedPermissions, $this->roleId);
+        $this->user_repo->addRolePermission($this->selectedPermissions, $this->roleId);
         $this->dispatch('show-success-modal'); 
         $this->editing = true;
         $this->isHidden = false;
         $this->moduleSearch = '';
-        $this->moduleResults = $this->repository->getModules();
-        $this->selectedPermissions = $this->repository->getRolePermissions($this->roleId);
-
+        $this->moduleResults = $this->user_repo->getModules();
+        $this->selectedPermissions = $this->user_repo->getRolePermissions($this->roleId);
     }
 
     public function cancelEditing()
     {
-
-        $this->moduleResults = $this->repository->getModules();
+        $this->moduleResults = $this->user_repo->getModules();
         $this->selectedPermissions = $this->originalPermissions;
         $this->moduleSearch = '';
         $this->editing = true;
         $this->isHidden = false;
-       
     }
-
 
     #[On('hide-permission-edit')]
     public function closeEdit()
     {
         $this->cancelEditing();
     }
-
 
     public function render()
     {  

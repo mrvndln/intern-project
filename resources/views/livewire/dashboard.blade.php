@@ -12,16 +12,23 @@
             <div class="flex-1 overflow-y-auto">
                 <nav class="px-2 py-4">
                     <!-- Dashboard Link -->
-                    <a href="#" wire:click="$set('activeView','dashboard')" class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-lg">
+                    <a href="#" wire:click="navPage('dashboard')" class="flex items-center px-4 py-2 text-gray-700 bg-gray-100 rounded-lg">
                         <i class="fas fa-tachometer-alt mr-3 text-gray-500"></i>
                         Dashboard
                     </a>
 
                     <!-- User Management Links -->
-                    <a href="#" wire:click="$set('activeView','staffList')" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <a href="#" wire:click="navPage('userManagement')" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
                         <i class="fas fa-users mr-3 text-gray-500"></i>
                         Users
                     </a>
+                    <!-- Patients Management -->
+                     @can('patient-management')
+                    <a href="#" wire:click="navPage('patientManagement')" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                        <i class="fas fa-wheelchair mr-3 text-gray-500"></i>
+                        Patients
+                    </a>
+                    @endcan
                     <!-- Other Management Links -->
                     @can('settings')
                     <a href="#" class="flex items-center px-4 py-2 mt-2 text-gray-600 hover:bg-gray-100 rounded-lg">
@@ -56,7 +63,7 @@
                 </button>
 
                 <!-- Page title - will change based on view -->
-                <h1 class="text-lg font-medium text-gray-800 ml-2">Dashboard</h1>
+                <h1 class="text-lg font-bold text-blue-600 ml-2">{{ $pageTitle }}</h1>
 
                 <!-- User controls -->
                 <div class="flex items-center space-x-4">
@@ -73,6 +80,9 @@
         <main class="p-4 sm:p-6">
             <!-- This is where your content will go -->
             <div x-show="activeView === 'dashboard'">
+               
+                <div class="flex space-x-2">
+
                 <div class="max-w-xs p-4 bg-white rounded-2xl shadow-md flex items-center gap-4">
                     <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
                         <!-- User icon (Heroicons or Lucide) -->
@@ -82,7 +92,7 @@
                                 d="M5.121 17.804A9 9 0 0112 15c2.485 0 4.735.998 6.379 2.621M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
-                    <div> <!-- Card -->
+                    <div> <!-- Card user -->
                         <h4 class="text-sm text-gray-500 mb-2">Users</h4>
 
                         <!-- Total and Active side-by-side -->
@@ -100,13 +110,46 @@
 
                         <!-- <p class="text-sm text-green-600 mt-3">+8% this week</p> -->
                     </div>
+                </div>
+
+                <div class="max-w-xs p-4 bg-white rounded-2xl shadow-md flex items-center gap-4">
+                    <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                        <!-- User icon (Heroicons or Lucide) -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5.121 17.804A9 9 0 0112 15c2.485 0 4.735.998 6.379 2.621M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div> <!-- Card patient -->
+                        <h4 class="text-sm text-gray-500 mb-2">Patients</h4>
+
+                        <!-- Total and Active side-by-side -->
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-2xl font-bold text-gray-800">{{ $totalPatients }}</p>
+                                <p class="text-xs text-gray-500">Total</p>
+                            </div>
+                            <div class="border-l border-gray-300 h-8 mx-4"></div>
+                            <div>
+                                <p class="text-2xl font-bold text-green-700">{{ $activePatients }}</p>
+                                <p class="text-xs text-gray-500">Active</p>
+                            </div>
+                        </div>
+
+                        <!-- <p class="text-sm text-green-600 mt-3">+8% this week</p> -->
+                    </div>
+                </div>
 
 
                 </div>
 
             </div>
-            <div x-show="activeView === 'staffList'" class="bg-white rounded-lg">
+            <div x-show="activeView === 'userManagement'" class="bg-white rounded-lg">
                 <livewire:staff-list />
+            </div>
+            <div x-show="activeView === 'patientManagement'" class="bg-white rounded-lg">
+                <livewire:patient-management />
             </div>
             <div x-show="activeView === 'accessControl'" class="flex justify-center bg-white rounded-lg shadow p-2">
                 <livewire:access-control />

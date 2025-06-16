@@ -2,13 +2,13 @@
 
 namespace App\Livewire;
 
-use App\Traits\BootPatientTrait;
+use App\Traits\BootTrait;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PatientManagement extends Component
 {
-    use BootPatientTrait;
+    use BootTrait;
     
     public $searchInput;
 

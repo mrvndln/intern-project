@@ -5,7 +5,7 @@
     >
         <div class="flex items-center w-full mb-4">
             <h1 class="text-2xl text-gray-800 font-extrabold">Role / <span class="text-blue-600">{{ $selectedRole ?? ''}}</span></h1>
-            <x-button class="hidden px-4 ml-auto">
+            <x-button class="px-4 ml-auto" @click="$dispatch('manage_roles', { value: 'manageRoles' })">
                 <x-slot:title>
                     Edit Role
                     </x-slot>

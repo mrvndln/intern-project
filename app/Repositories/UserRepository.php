@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Log;
-use PDO;
 use Str;
 
 class UserRepository implements UserInterface
@@ -182,7 +181,7 @@ class UserRepository implements UserInterface
 
     public function getResults($data, $searchId)
     {
-        if ($searchId == 'user-list') {
+        if ($searchId == 'user') {
             try {
                 $user = DB::table('users')
                     ->join('roles', 'users.role_id', '=', 'roles.id')
